@@ -5,7 +5,6 @@ import BoardContent from './BoardContent'
 const Board = () => {
   return (
     <Container disableGutters maxWidth={false} sx={{
-      backgroundColor: 'primary.main'
     }}>
       <AppBar />
       <BoardBar />
