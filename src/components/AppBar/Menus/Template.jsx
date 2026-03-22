@@ -23,7 +23,7 @@ function Template () {
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
       >
-        TEMPLATE
+        Template
       </Button>
       <Menu
         id="basic-menu-template"

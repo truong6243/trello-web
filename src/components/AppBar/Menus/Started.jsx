@@ -23,7 +23,7 @@ function Started () {
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
       >
-        STARTED
+        Started
       </Button>
       <Menu
         id="basic-menu-started"
