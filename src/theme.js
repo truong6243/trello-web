@@ -1,4 +1,5 @@
-import { extendTheme } from "@mui/material";
+import { BorderColor } from "@mui/icons-material";
+import { colors, extendTheme } from "@mui/material";
 import { cyan, deepOrange, orange, teal } from "@mui/material/colors";
 
 const theme = extendTheme({
@@ -11,28 +12,50 @@ const theme = extendTheme({
       palette: {
         primary: teal,
         secondary: deepOrange,
-        // Đổi 'colors' thành 'palette'
-        background: {
-          default: "#f9f9f9", // MUI sẽ tự động lấy màu này làm nền trang web
-          paper: "#ffffff", // Nền cho các component nổi lên như thẻ Card, Modal
-        },
-        text: {
-          primary: "#121212", // MUI tự động lấy màu này làm màu chữ chính
-        },
       },
     },
     dark: {
       palette: {
         primary: cyan,
         secondary: orange,
-        // Đổi 'colors' thành 'palette'
-        background: {
-          default: "#212121",
-          paper: "#2c2c2c",
+      },
+    },
+  },
+  components: {
+    // Name of the component
+    MuiButton: {
+      styleOverrides: {
+        // Name of the slot
+        root: {
+          // Some CSS
+          textTransform: "none",
         },
-        text: {
-          primary: "#fff",
-        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.primary.main,
+          fontSize: "0.875rem"
+        }),
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        // Name of the slot
+        root: ({ theme }) => ({
+          color: theme.palette.primary.main,
+          fontSize: "0.875rem",
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.primary.light,
+          },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.primary.main,
+          },
+          "& fieldset": {
+            borderWidth: "1px !important",
+          },
+        }),
       },
     },
   },
