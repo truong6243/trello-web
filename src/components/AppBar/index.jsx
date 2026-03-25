@@ -16,6 +16,8 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import Tooltip from '@mui/material/Tooltip';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import AddIcon from '@mui/icons-material/Add';
+import ModeSelect from "../ModeSelect";
+
 const AppBar = () => {
   return (
     <>
@@ -48,7 +50,7 @@ const AppBar = () => {
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <TextField id="outlined-search" label="Search field" type="search" size="small" />
-          <Brightness4Icon />
+          <ModeSelect />
           <Tooltip title="Notifications">
             <Badge color="secondary" variant="dot" sx={{ cursor: 'pointer' }}>
               <NotificationsNoneIcon sx={{ color: 'primary.main' }} />
