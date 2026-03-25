@@ -2,6 +2,7 @@ import { extendTheme } from "@mui/material";
 import { cyan, deepOrange, orange, teal } from "@mui/material/colors";
 
 const theme = extendTheme({
+  colorSchemeSelector: 'class',
   trello: {
     headerHeight: "58px",
     boardBarHeight: "60px",
