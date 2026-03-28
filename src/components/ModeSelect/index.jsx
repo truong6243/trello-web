@@ -16,32 +16,46 @@ const ModeSelect = () => {
     return null;
   }
   return (
-      <FormControl sx={{minWidth: 120}} size='small'>
-        <InputLabel id="label_dark_light_mode">Mode Select</InputLabel>
-        <Select
-          labelId="label_dark_light_mode"
-          id="dark_light_mode"
-          value={mode}
-          label="mode"
-          onChange={handleChange}
-        >
-          <MenuItem value='light'>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <LightModeIcon fontSize='small' /> Light
-            </div>
-          </MenuItem>
-          <MenuItem value='dark'>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <DarkModeIcon fontSize='small'/> Dark
-            </div>
-          </MenuItem>
-          <MenuItem value='system'>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <SettingsBrightnessIcon fontSize='small'/> System
-            </div>
-          </MenuItem>
-        </Select>
-      </FormControl>
+    <FormControl sx={{ minWidth: 120 }} size='small'>
+      <InputLabel
+        id="label_dark_light_mode"
+        sx={{
+          color: 'white',
+          '&.Mui-focused ': {color: 'white'}
+        }}>
+        Mode </InputLabel>
+      <Select
+        labelId="label_dark_light_mode"
+        id="dark_light_mode"
+        value={mode}
+        label="mode"
+        onChange={handleChange}
+        sx={{ 
+          color: 'white',
+          '&:hover .MuiOutlinedInput-notchedOutline': {borderColor: 'white'},
+          '.MuiOutlinedInput-notchedOutline': {borderColor: 'white'},
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {borderColor: 'white'},
+          '.MuiSvgIcon-root ': {color: 'white'}
+        }}
+      >
+
+        <MenuItem value='light'>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <LightModeIcon fontSize='small' /> Light
+          </div>
+        </MenuItem>
+        <MenuItem value='dark'>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <DarkModeIcon fontSize='small' /> Dark
+          </div>
+        </MenuItem>
+        <MenuItem value='system'>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <SettingsBrightnessIcon fontSize='small' /> System
+          </div>
+        </MenuItem>
+      </Select>
+    </FormControl>
   )
 }
 

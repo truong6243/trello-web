@@ -22,6 +22,7 @@ function Workspaces() {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
+        sx={{color: 'white'}}
       >
         Workspaces
       </Button>
