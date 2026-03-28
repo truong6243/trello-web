@@ -22,6 +22,7 @@ function Started () {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
+        sx={{color: 'white'}}
       >
         Started
       </Button>

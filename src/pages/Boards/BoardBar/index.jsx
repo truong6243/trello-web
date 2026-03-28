@@ -12,26 +12,31 @@ import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 
 const BoardBar = () => {
   const MENU_STYLE = {
-    color: 'primary.main',
+    color: 'white',
+    bgcolor: 'transparant',
     border: 'none',
     paddingX: 1,
     borderRadius: '4px',
     '& .MuiSvgIcon-root': {
-      color: 'primary.main'
+      color: 'white'
     },
   }
   return (
     <>
-      <Box sx={{
-        height: (theme) => theme.trello.boardBarHeight,
+      <Box sx={(theme => ({
+        height: theme.trello.boardBarHeight,
         width: '100%',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        borderTop: '1px solid #00bfa5',
+        borderBottom: '1px solid white',
         paddingX: 2,
         overflowX: 'auto',
-      }}>
+        bgcolor: '#1976d2',
+        ...theme.applyStyles('dark', {
+          bgcolor: '#34495e'
+        })
+      }))}>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
           <Chip label="TruongLamDev"
             variant="outlined"
@@ -67,14 +72,21 @@ const BoardBar = () => {
 
         </Box>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-          <Button variant="outlined" startIcon={<PersonAddAltIcon />}>Invite</Button> 
+          <Button
+            sx={{ color: 'white', borderColor: 'white' }}
+            variant="outlined"
+            startIcon={<PersonAddAltIcon />}
+          >
+            Invite
+          </Button>
           <AvatarGroup
             max={4}
             sx={{
               '& .MuiAvatar-root': {
                 width: '34px',
                 height: '34px',
-                fontSize: 14
+                fontSize: 14,
+                border: 'none'
               }
             }}
           >

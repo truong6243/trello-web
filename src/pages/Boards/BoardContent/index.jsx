@@ -4,13 +4,16 @@ const BoardContent = () => {
   const theme = useTheme()
   return (
     <>
-      <Box sx={{
-        backgroundColor: 'primary.main',
+      <Box sx={(theme => ({
         height: `calc(100vh - ${theme.trello.headerHeight} - ${theme.trello.boardBarHeight})`,
         width: '100%',
         display: 'flex',
-        alignItems: 'center'
-      }}>
+        alignItems: 'center',
+        bgcolor: '#1976d2',
+        ...theme.applyStyles('dark', {
+          bgcolor: '#34495e'
+        })
+      }))}>
         Board Content
       </Box>
     </>
