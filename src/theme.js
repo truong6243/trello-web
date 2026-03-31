@@ -2,6 +2,8 @@ import { createTheme } from "@mui/material";
 // import { blue, cyan, deepOrange, orange, teal } from "@mui/material/colors";
 const APP_BAR_HEIGHT = '58px'
 const BOARD_BAR_HEIGHT = '60px'
+const HEADER_HEIGHT = '50px'
+const FOOTER_HEIGHT = '50px'
 const BOARD_CONTENT_HEIGHT = `calc(100vh - ${APP_BAR_HEIGHT} - ${BOARD_BAR_HEIGHT})`
 const theme = createTheme({
   cssVariables: {
@@ -10,7 +12,9 @@ const theme = createTheme({
   trello: {
     appbarHeight: APP_BAR_HEIGHT,
     boardBarHeight: BOARD_BAR_HEIGHT,
-    boardContentHeight: BOARD_CONTENT_HEIGHT
+    boardContentHeight: BOARD_CONTENT_HEIGHT,
+    columnHeaderHeight: HEADER_HEIGHT,
+    columnFooterHeight: FOOTER_HEIGHT
   },
   colorSchemes: {
     light: {

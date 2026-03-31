@@ -15,7 +15,7 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import Tooltip from '@mui/material/Tooltip';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import AddIcon from '@mui/icons-material/Add';
-import ModeSelect from "../ModeSelect";
+import ModeSelect from "../ModeSelect/ModeSelect";
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
