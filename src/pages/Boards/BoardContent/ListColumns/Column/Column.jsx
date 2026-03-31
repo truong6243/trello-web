@@ -19,9 +19,10 @@ import AddCardIcon from '@mui/icons-material/AddCard';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import Button from '@mui/material/Button';
 import ListCards from './ListCards/ListCards';
-
-const Column = () => {
-   const [anchorEl, setAnchorEl] = useState(null);
+import { mapOrder } from '../../../../../utils/fomatter';
+const Column = ({ column }) => {
+  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -50,7 +51,7 @@ const Column = () => {
         alignItems: 'center',
         paddingX: 2
       })}>
-        <Typography variant='h6' sx={{ fontWeight: 'bold', fontSize: '1rem' }}>Column Title</Typography>
+        <Typography variant='h6' sx={{ fontWeight: 'bold', fontSize: '1rem' }}> {column.title} </Typography>
         <Tooltip title='More Options' >
           <IconButton
             id="basic-column-dropdown"
@@ -114,7 +115,7 @@ const Column = () => {
       </Box>
 
       {/* Box column list card */}
-      <ListCards />
+      <ListCards cards={orderedCards} />
       {/* Box column footer */}
       <Box
         sx={theme => ({
