@@ -25,7 +25,7 @@ const AppBar = () => {
   return (
     <>
       <Box px={2} sx={(theme => ({
-        height: theme.trello.headerHeight,
+        height: theme.trello.appbarHeight,
         width: '100%',
         display: 'flex',
         alignItems: 'center',
@@ -33,6 +33,9 @@ const AppBar = () => {
         gap: 1,
         overflowX: 'auto',
         bgcolor: '#1565c0',
+        "&::-webkit-scrollbar-track": {
+          m: 2
+        },
         ...theme.applyStyles('dark', {
           bgcolor: '#2c3e50'
         })
@@ -75,9 +78,9 @@ const AppBar = () => {
                     onClick={() => setInputSearch('')}
                     fontSize="small"
                     sx={{
-                      color: (inputSearch ? 'white': 'transparent'),
+                      color: (inputSearch ? 'white' : 'transparent'),
                       cursor: 'pointer',
-                      
+
                     }} />
                 )
               },
