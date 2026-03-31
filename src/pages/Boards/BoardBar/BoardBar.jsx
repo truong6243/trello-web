@@ -9,8 +9,8 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
-
-const BoardBar = () => {
+import { capitallizeFirstLetter } from '../../../utils/fomatter';
+const BoardBar = ({board}) => {
   const MENU_STYLE = {
     color: 'white',
     bgcolor: 'transparant',
@@ -41,14 +41,14 @@ const BoardBar = () => {
         })
       }))}>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-          <Chip label="TruongLamDev"
+          <Chip label= {board?.title}
             variant="outlined"
             icon={<AutoAwesomeMosaicIcon />}
             clickable
             sx={MENU_STYLE}
           />
           <Chip
-            label="Public/Private Workspace"
+            label= {capitallizeFirstLetter(board?.type)}
             variant="outlined"
             icon={<PublicIcon />}
             clickable
