@@ -5,32 +5,32 @@ import Button from '@mui/material/Button';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 const ListColumn = ({ columns }) => {
   return (
-    <Box sx={{
-      width: '100%',
-      height: '100%',
-      bgcolor: 'inherit',
-      display: 'flex',
-      overflowX: 'auto',
-      overflowY: 'hidden',
-      "&::-webkit-scrollbar-track": {
-        m: 2
-      },
-    }}>
-      {columns?.map(column => <Column key={column._id} column={column} />)}
-
-      {/* Add new column */}
       <Box sx={{
-        maxWidth: '200px',
-        minWidth: '200px',
-        height: 'fit-content',
-        bgcolor: '#ffffff3d',
-        borderRadius: '6px',
-        ml: 2
-      }}
-      >
-        <Button sx={{ color: 'white', width: '100%', justifyContent: 'flex-start', pl: 2.5, py: 1 }} startIcon={<NoteAddIcon />}>Add new column</Button>
+        width: '100%',
+        height: '100%',
+        bgcolor: 'inherit',
+        display: 'flex',
+        overflowX: 'auto',
+        overflowY: 'hidden',
+        "&::-webkit-scrollbar-track": {
+          m: 2
+        },
+      }}>
+        {columns?.map((column, index) => <Column key={column._id} column={column} index={index} />)}
+
+        {/* Add new column */}
+        <Box sx={{
+          maxWidth: '200px',
+          minWidth: '200px',
+          height: 'fit-content',
+          bgcolor: '#ffffff3d',
+          borderRadius: '6px',
+          ml: 2
+        }}
+        >
+          <Button sx={{ color: 'white', width: '100%', justifyContent: 'flex-start', pl: 2.5, py: 1 }} startIcon={<NoteAddIcon />}>Add new column</Button>
+        </Box>
       </Box>
-    </Box>
   )
 }
 
