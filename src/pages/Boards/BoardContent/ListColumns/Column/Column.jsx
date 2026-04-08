@@ -21,12 +21,16 @@ import Button from '@mui/material/Button';
 import ListCards from './ListCards/ListCards';
 import { mapOrder } from '../../../../../utils/fomatter';
 import { useSortable } from '@dnd-kit/react/sortable';
+import { CollisionPriority } from '@dnd-kit/abstract';
 const Column = ({ column, index }) => {
   const sortable = useSortable({
     id: column._id,
     index: index,
     data: { ...column },
-    element: column
+    element: column,
+    collisionPriority: CollisionPriority.Low,
+    accept: ['column', 'card'],
+    type: 'column',
   });
 
   const dndkitStyle = {
@@ -35,7 +39,7 @@ const Column = ({ column, index }) => {
       : undefined,
     transition: sortable.transition,
     opacity: sortable.isDragging ? 0.5 : 1,
-    touchAction: 'none', 
+    touchAction: 'none',
     userSelect: 'none',
   };
 
@@ -136,7 +140,7 @@ const Column = ({ column, index }) => {
       </Box>
 
       {/* Box column list card */}
-      <ListCards cards={orderedCards} />
+      <ListCards cards={orderedCards} column = {column} />
       {/* Box column footer */}
       <Box
         sx={theme => ({
