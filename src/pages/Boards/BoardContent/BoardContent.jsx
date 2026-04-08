@@ -32,9 +32,12 @@ const BoardContent = ({ board }) => {
   const sensors = [
     PointerSensor.configure({
       activationConstraints: [
-        // new PointerActivationConstraints.Distance({ value: 5 }),
-        // new PointerActivationConstraints.Delay({ value: 200, tolerance: 10 }),
-      ],
+        new PointerActivationConstraints.Distance({ value: 5 }),
+        new PointerActivationConstraints.Delay({
+          value: 300,
+          tolerance: { x: 10, y: 5 },
+        }),
+      ]
     }),
   ]
   const orderedColumns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
