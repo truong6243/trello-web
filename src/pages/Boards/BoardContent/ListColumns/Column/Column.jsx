@@ -22,7 +22,7 @@ import ListCards from './ListCards/ListCards';
 import { mapOrder } from '../../../../../utils/fomatter';
 import { useSortable } from '@dnd-kit/react/sortable';
 import { CollisionPriority } from '@dnd-kit/abstract';
-const Column = ({ column, index }) => {
+const Column = ({ column, index, isOverLay }) => {
   const sortable = useSortable({
     id: column._id,
     index: index,
@@ -32,16 +32,15 @@ const Column = ({ column, index }) => {
     accept: ['column', 'card'],
     type: 'column',
   });
-
-  const dndkitStyle = {
+  const dndkitStyle = !isOverLay ? {
     transform: sortable.transform
       ? `translate3d(${sortable.transform.x}px, ${sortable.transform.y}px, 0)`
       : undefined,
     transition: sortable.transition,
-    opacity: sortable.isDragging ? 0.5 : 1,
+    opacity: sortable.isDragging || sortable.isDropping ? 0.5 : undefined,
     touchAction: 'none',
     userSelect: 'none',
-  };
+  } : {};
 
   const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
   const [anchorEl, setAnchorEl] = useState(null);
@@ -54,13 +53,13 @@ const Column = ({ column, index }) => {
   };
   return (
     <Box
-      style={dndkitStyle}
+      style= {dndkitStyle}
       ref={sortable.ref}
-      sx={(theme => ({
+      sx={(theme => ({  
         minWidth: '300px',
         maxWidth: '300px',
         borderRadius: '8px',
-        ml: 2,
+        ml: isOverLay ? '0' : 2,
         height: 'fit-content',
         bgcolor: '#ebecf0',
         maxHeight: `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)} )`,
@@ -140,7 +139,7 @@ const Column = ({ column, index }) => {
       </Box>
 
       {/* Box column list card */}
-      <ListCards cards={orderedCards} column = {column} />
+      <ListCards cards={orderedCards} column={column} />
       {/* Box column footer */}
       <Box
         sx={theme => ({
