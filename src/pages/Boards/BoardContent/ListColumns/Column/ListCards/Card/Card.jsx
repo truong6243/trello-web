@@ -8,13 +8,36 @@ import CardMedia from '@mui/material/CardMedia';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import CommentIcon from '@mui/icons-material/Comment';
 import AttachmentIcon from '@mui/icons-material/Attachment';
+import { useSortable } from '@dnd-kit/react/sortable';
 // import lizar from '~/assets/lizar.jpg'
-const Card = ({ card }) => {
+const Card = ({ card, index, columnId}) => {
+  const cardSortable = useSortable({
+    id: card._id,
+    index: index,
+    data: { ...card },
+    element: card,
+    group: columnId,
+    accept: 'card',
+    type: 'card',
+    feedback: 'clone',
+
+  });
+  const dndkitCardStyle = {
+    transform: cardSortable.transform
+      ? `translate3d(${cardcardSortable.transform.x}px, ${cardSortable.transform.y}px, 0)`
+      : undefined,
+    transition: cardSortable.transition,
+    opacity: cardSortable.isDragging ? 0.5 : 1,
+    touchAction: 'none',
+    userSelect: 'none',
+  };
   const shouldShowCardActions = () => (
     !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
   )
   return (
     <MuiCard
+      style={dndkitCardStyle}
+      ref={cardSortable.ref}
       sx={{
         maxWidth: 345,
         cursor: 'pointer',

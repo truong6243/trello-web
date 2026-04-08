@@ -1,7 +1,7 @@
 import React from 'react'
 import Box from '@mui/material/Box'
 import Card from './Card/Card'
-const ListCards = ({ cards }) => {
+const ListCards = ({ cards, column}) => {
   return (
     <Box
       sx={{
@@ -27,7 +27,7 @@ const ListCards = ({ cards }) => {
 
       }}
     >
-      {cards?.map(card => <Card key={card._id} card={card} />)}
+      {cards?.map( (card, index) => <Card key={card._id} card={card} index = {index} columnId = {column._id}/>)}
     </Box>
   )
 }
