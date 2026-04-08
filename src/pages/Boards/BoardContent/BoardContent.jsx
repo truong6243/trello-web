@@ -37,11 +37,9 @@ const BoardContent = ({ board }) => {
       ],
     }),
   ]
-  // console.log('sennsor: ', sensors)
   const orderedColumns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
 
   const handleDragStart = (event) => {
-    console.log('handleDragStart: ', event)
     setActiveDragItemId(event?.operation?.source?.id)
     setActiveDragItemType(event?.operation?.source?.data?.columnId ? ACTIVE_DRAG_ITEM_TYPE.CARD :
       ACTIVE_DRAG_ITEM_TYPE.COLUMN
@@ -50,7 +48,6 @@ const BoardContent = ({ board }) => {
   }
 
   const handleDragEnd = (event) => {
-    console.log('handleDragEnd: ', event)
     // 1. Lấy trạng thái hủy và thông tin operation từ event
     const { canceled, operation } = event;
 
