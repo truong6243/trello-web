@@ -27,7 +27,7 @@ const Card = ({ card, index, columnId}) => {
       ? `translate3d(${cardcardSortable.transform.x}px, ${cardSortable.transform.y}px, 0)`
       : undefined,
     transition: cardSortable.transition,
-    opacity: cardSortable.isDragging ? 0.5 : 1,
+    opacity: cardSortable.isDragging ? 0.5 : undefined,
     touchAction: 'none',
     userSelect: 'none',
   };
