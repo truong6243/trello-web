@@ -3,10 +3,9 @@ import ListColumn from './ListColumns/ListColumn';
 import { mapOrder } from '../../../utils/fomatter';
 import { DragDropProvider, DragOverlay } from '@dnd-kit/react';
 import { defaultPreset, PointerSensor, PointerActivationConstraints } from '@dnd-kit/dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Column from './ListColumns/Column/Column';
 import Card from './ListColumns/Column/ListCards/Card/Card';
-import { arrayMove } from '@dnd-kit/sortable';
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
@@ -14,16 +13,9 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 }
 
 const BoardContent = ({ board }) => {
-
   const [activeDragItemId, setActiveDragItemId] = useState(null)
   const [activeDragItemType, setActiveDragItemType] = useState(null)
   const [activeDragItemData, setActiveDragItemData] = useState(null)
-  const [orderedColumns, setOrderedColumns] = useState([])
-
-  useEffect(() => {
-    setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
-  }, [board])
-  console.log(orderedColumns)
 
   const sensors = [
     PointerSensor.configure({
@@ -36,6 +28,7 @@ const BoardContent = ({ board }) => {
       ]
     }),
   ]
+  const orderedColumns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
 
   const handleDragStart = (event) => {
     setActiveDragItemId(event?.operation?.source?.id)
@@ -54,14 +47,6 @@ const BoardContent = ({ board }) => {
 
     // 3. Lấy source và target từ operation
     const { source } = operation;
-
-    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
-      const { initialIndex } = source
-      const newIndex = source.index
-      const dndOrderedColumns = arrayMove(orderedColumns, initialIndex, newIndex)
-      setOrderedColumns(dndOrderedColumns)
-    }
-
     // setActiveDragItemId(null)
     // setActiveDragItemType(null)
     // setActiveDragItemData(null)
@@ -83,11 +68,11 @@ const BoardContent = ({ board }) => {
         })
       }))}>
         <ListColumn columns={orderedColumns} />
-        <DragOverlay dropAnimation={{ duration: 300, easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)', }}>
+        <DragOverlay dropAnimation={{ duration: 200, easing: 'ease-out' }}>
           {/* {!activeDragItemType && null} */}
           {(activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) && <Column column={activeDragItemData} isOverLay />}
           {(activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) &&
-            <Card card={activeDragItemData} columnId={activeDragItemData.columnId} isOverLay />
+            <Card card={activeDragItemData} columnId={activeDragItemData.columnId} />
           }
         </DragOverlay>
       </Box>
