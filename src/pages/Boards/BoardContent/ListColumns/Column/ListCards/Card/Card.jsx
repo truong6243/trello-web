@@ -9,8 +9,7 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import CommentIcon from '@mui/icons-material/Comment';
 import AttachmentIcon from '@mui/icons-material/Attachment';
 import { useSortable } from '@dnd-kit/react/sortable';
-// import lizar from '~/assets/lizar.jpg'
-const Card = ({ card, index, columnId}) => {
+const Card = ({ card, index, columnId, isOverLay }) => {
   const cardSortable = useSortable({
     id: card._id,
     index: index,
@@ -20,17 +19,16 @@ const Card = ({ card, index, columnId}) => {
     accept: 'card',
     type: 'card',
     feedback: 'clone',
-
   });
-  const dndkitCardStyle = {
+  const dndkitCardStyle = !isOverLay ? {
     transform: cardSortable.transform
       ? `translate3d(${cardcardSortable.transform.x}px, ${cardSortable.transform.y}px, 0)`
       : undefined,
     transition: cardSortable.transition,
-    opacity: cardSortable.isDragging ? 0.5 : undefined,
+    opacity: cardSortable.isDragging || cardSortable.isDropping ? 0.5 : undefined,
     touchAction: 'none',
     userSelect: 'none',
-  };
+  } : {};
   const shouldShowCardActions = () => (
     !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
   )

@@ -1,3 +1,7 @@
 :root {
   font-family: "Roboto", sans-serif;
 }
+/* sua flickering tam thoi */
+[data-dnd-overlay]:not([style*='--dnd-translate']) {
+  display: none;
+}
