@@ -197,6 +197,14 @@
     "@dnd-kit/state" "^0.3.2"
     tslib "^2.6.2"
 
+"@dnd-kit/helpers@^0.3.2":
+  version "0.3.2"
+  resolved "https://registry.npmjs.org/@dnd-kit/helpers/-/helpers-0.3.2.tgz"
+  integrity sha512-pj7pCE6BiysNetpPnzb3BJOrcKiqueUr1LFg6wYoi2fIFYpz66n2Ojd7HTwfwkpv0oyC3QlvA6Dk8cOmi6VavA==
+  dependencies:
+    "@dnd-kit/abstract" "^0.3.2"
+    tslib "^2.6.2"
+
 "@dnd-kit/react@^0.3.2":
   version "0.3.2"
   resolved "https://registry.npmjs.org/@dnd-kit/react/-/react-0.3.2.tgz"
@@ -1796,6 +1804,11 @@ lodash.merge@^4.6.2:
   version "4.6.2"
   resolved "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
+
+lodash@^4.18.1:
+  version "4.18.1"
+  resolved "https://registry.npmjs.org/lodash/-/lodash-4.18.1.tgz"
+  integrity sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==
 
 loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"

@@ -27,10 +27,10 @@ const Column = ({ column, index, isOverLay }) => {
     id: column._id,
     index: index,
     data: { ...column },
-    element: column,
     collisionPriority: CollisionPriority.Low,
     accept: ['column', 'card'],
     type: 'column',
+    disabled: isOverLay
   });
   const dndkitStyle = !isOverLay ? {
     transform: sortable.transform
@@ -54,7 +54,7 @@ const Column = ({ column, index, isOverLay }) => {
   return (
     <Box
       style= {dndkitStyle}
-      ref={sortable.ref}
+      ref={isOverLay ? null : sortable.ref}
       sx={(theme => ({  
         minWidth: '300px',
         maxWidth: '300px',

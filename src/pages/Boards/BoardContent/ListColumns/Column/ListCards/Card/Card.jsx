@@ -14,18 +14,18 @@ const Card = ({ card, index, columnId, isOverLay }) => {
     id: card._id,
     index: index,
     data: { ...card },
-    element: card,
     group: columnId,
     accept: 'card',
     type: 'card',
-    feedback: 'clone',
+    disabled: isOverLay
   });
   const dndkitCardStyle = !isOverLay ? {
     transform: cardSortable.transform
-      ? `translate3d(${cardcardSortable.transform.x}px, ${cardSortable.transform.y}px, 0)`
+      ? `translate3d(${cardSortable.transform.x}px, ${cardSortable.transform.y}px, 0)`
       : undefined,
     transition: cardSortable.transition,
-    opacity: cardSortable.isDragging || cardSortable.isDropping ? 0.5 : undefined,
+    // Keep dim effect only while dragging to avoid stale faded card after drop.
+    opacity: cardSortable.isDragging ? 0.5 : undefined,
     touchAction: 'none',
     userSelect: 'none',
   } : {};
@@ -35,12 +35,13 @@ const Card = ({ card, index, columnId, isOverLay }) => {
   return (
     <MuiCard
       style={dndkitCardStyle}
-      ref={cardSortable.ref}
+      ref={isOverLay ? null : cardSortable.ref}
       sx={{
         maxWidth: 345,
         cursor: 'pointer',
         boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
-        overflow: 'unset'
+        overflow: 'unset',
+        display: card?.FE_PlaceholderCard ? 'none' : 'block'
       }}>
       {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} title="green iguana" />}
       <CardContent sx={{ p: 1.5, '&:last-child': { paddingY: 1.5 } }}>
