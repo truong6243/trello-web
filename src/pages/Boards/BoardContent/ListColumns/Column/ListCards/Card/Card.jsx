@@ -9,6 +9,7 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import CommentIcon from '@mui/icons-material/Comment';
 import AttachmentIcon from '@mui/icons-material/Attachment';
 import { useSortable } from '@dnd-kit/react/sortable';
+
 const Card = ({ card, index, columnId, isOverLay }) => {
   const cardSortable = useSortable({
     id: card._id,
@@ -17,14 +18,13 @@ const Card = ({ card, index, columnId, isOverLay }) => {
     group: columnId,
     accept: 'card',
     type: 'card',
-    disabled: isOverLay
+    disabled: isOverLay,
   });
   const dndkitCardStyle = !isOverLay ? {
     transform: cardSortable.transform
       ? `translate3d(${cardSortable.transform.x}px, ${cardSortable.transform.y}px, 0)`
       : undefined,
     transition: cardSortable.transition,
-    // Keep dim effect only while dragging to avoid stale faded card after drop.
     opacity: cardSortable.isDragging ? 0.5 : undefined,
     touchAction: 'none',
     userSelect: 'none',
@@ -41,11 +41,10 @@ const Card = ({ card, index, columnId, isOverLay }) => {
         cursor: 'pointer',
         boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
         overflow: 'unset',
-        display: card?.FE_PlaceholderCard ? 'none' : 'block'
       }}>
       {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} title="green iguana" />}
       <CardContent sx={{ p: 1.5, '&:last-child': { paddingY: 1.5 } }}>
-        <Typography >{card?.title}</Typography>
+        <Typography>{card?.title}</Typography>
       </CardContent>
       {shouldShowCardActions() && <CardActions sx={{ p: '0 4px 8px 4px' }}>
         {!!card?.memberIds?.length &&
@@ -55,7 +54,6 @@ const Card = ({ card, index, columnId, isOverLay }) => {
         {!!card?.attachments?.length &&
           <Button startIcon={<AttachmentIcon />} size="small">{card?.attachments?.length}</Button>}
       </CardActions>}
-
     </MuiCard>
   )
 }
