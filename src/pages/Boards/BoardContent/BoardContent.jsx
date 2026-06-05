@@ -14,10 +14,23 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 }
 const DROP_ANIMATION_DURATION = 300
 
+const reorderCardsInColumn = (cards, activeCardId, overIndex) => {
+  const oldIndex = cards.findIndex((card) => card._id === activeCardId)
+  if (oldIndex === -1) return cards
+
+  const newIndex = Number.isInteger(overIndex)
+    ? Math.min(Math.max(overIndex, 0), cards.length - 1)
+    : oldIndex
+  if (oldIndex === newIndex) return cards
+
+  return arrayMove(cards, oldIndex, newIndex)
+}
+
 const BoardContent = ({ board }) => {
   const [activeDragItemId, setActiveDragItemId] = useState(null)
   const [activeDragItemType, setActiveDragItemType] = useState(null)
   const [activeDragItemData, setActiveDragItemData] = useState(null)
+  const [activeDragItemIndex, setActiveDragItemIndex] = useState(null)
   const [orderedColumns, setOrderedColumns] = useState([])
   const clearDragStateTimeoutRef = useRef(null)
   const lastDragOverSignatureRef = useRef(null)
@@ -54,23 +67,22 @@ const BoardContent = ({ board }) => {
       ACTIVE_DRAG_ITEM_TYPE.COLUMN
     )
     setActiveDragItemData(event?.operation?.source?.data)
+    setActiveDragItemIndex(
+      typeof event?.operation?.source?.index === 'number' ? event.operation.source.index : null
+    )
   }
 
   const handleDragOver = (event) => {
-    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) return
-    // logic xu ly keo tha card qua lai cac column
+    // Use operation source type (not React state) so logic never runs stale on first drag frames.
     const { source, target } = event?.operation || {}
+    if (source?.type !== 'card') return
     const fromColumnId = source?.group || source?.initialGroup
-    const toColumnId = target?.group
+    const toColumnId = target?.group ?? (target?.type === 'column' ? target?.id : undefined)
     const overIndex = target?.index
     const activeCard = source?.data
 
     if (!source?.id || !fromColumnId || !toColumnId || !activeCard) return
-    // logic xu ly khi keo tha card qua lai cung column
-    if (fromColumnId === toColumnId) {
-      return
-    }
-    // logic xu ly khi keo tha card qua lai cac column khac nhau
+
     const dragOverSignature = `${source.id}|${fromColumnId}|${toColumnId}|${overIndex}`
     if (lastDragOverSignatureRef.current === dragOverSignature) return
     lastDragOverSignatureRef.current = dragOverSignature
@@ -80,6 +92,18 @@ const BoardContent = ({ board }) => {
       const nextActiveColumn = nextColumns.find(column => column._id === fromColumnId)
       const nextOverColumn = nextColumns.find(column => column._id === toColumnId)
       if (!nextActiveColumn || !nextOverColumn) return pre
+
+      if (fromColumnId === toColumnId) {
+        const reorderedCards = reorderCardsInColumn(
+          nextActiveColumn.cards,
+          source.id,
+          overIndex
+        )
+        if (reorderedCards === nextActiveColumn.cards) return pre
+        nextActiveColumn.cards = reorderedCards
+        nextActiveColumn.cardOrderIds = reorderedCards.map(card => card._id)
+        return nextColumns
+      }
 
       // xoa card o column dang keo theo group hien tai
       nextActiveColumn.cards = nextActiveColumn.cards.filter(card => card._id !== source.id)
@@ -108,15 +132,39 @@ const BoardContent = ({ board }) => {
       const { initialIndex, index: newIndex } = source
       const dndOrderedColumns = arrayMove(orderedColumns, initialIndex, newIndex)
       setOrderedColumns(dndOrderedColumns)
+    } else if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
+      const initialGroup = source?.initialGroup
+      const group = source?.group
+      const { initialIndex, index: newIndex, id: cardId } = source
+      // Cross-column moves are applied in onDragOver; only finalize same-column order here.
+      if (
+        initialGroup &&
+        initialGroup === group &&
+        cardId &&
+        typeof initialIndex === 'number' &&
+        typeof newIndex === 'number' &&
+        initialIndex !== newIndex
+      ) {
+        setOrderedColumns(pre => {
+          const nextColumns = cloneDeep(pre)
+          const column = nextColumns.find(col => col._id === group)
+          if (!column) return pre
+          const reorderedCards = reorderCardsInColumn(column.cards, cardId, newIndex)
+          if (reorderedCards === column.cards) return pre
+          column.cards = reorderedCards
+          column.cardOrderIds = reorderedCards.map(card => card._id)
+          return nextColumns
+        })
+      }
     }
     clearDragStateTimeoutRef.current = setTimeout(() => {
       setActiveDragItemId(null)
       setActiveDragItemType(null)
       setActiveDragItemData(null)
+      setActiveDragItemIndex(null)
       clearDragStateTimeoutRef.current = null
     }, DROP_ANIMATION_DURATION)
   }
-  console.log('orderedColumns', orderedColumns)
   return (
     <DragDropProvider
       onDragStart={handleDragStart}
@@ -138,7 +186,12 @@ const BoardContent = ({ board }) => {
         <DragOverlay dropAnimation={{ duration: DROP_ANIMATION_DURATION, easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)', }}>
           {(activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) && <Column column={activeDragItemData} isOverLay />}
           {(activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) &&
-            <Card card={activeDragItemData} columnId={activeDragItemData.columnId} isOverLay />
+            <Card
+              card={activeDragItemData}
+              columnId={activeDragItemData.columnId}
+              index={activeDragItemIndex ?? 0}
+              isOverLay
+            />
           }
         </DragOverlay>
       </Box>
