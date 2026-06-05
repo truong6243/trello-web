@@ -76,7 +76,6 @@ const BoardContent = ({ board }) => {
     // Use operation source type (not React state) so logic never runs stale on first drag frames.
     const { source, target } = event?.operation || {}
     if (source?.type !== 'card') return
-
     const fromColumnId = source?.group || source?.initialGroup
     const toColumnId = target?.group ?? (target?.type === 'column' ? target?.id : undefined)
     const overIndex = target?.index
