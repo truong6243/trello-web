@@ -10,7 +10,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import { capitallizeFirstLetter } from '../../../utils/fomatter';
-const BoardBar = ({board}) => {
+const BoardBar = ({ board }) => {
   const MENU_STYLE = {
     color: 'white',
     bgcolor: 'transparant',
@@ -41,14 +41,16 @@ const BoardBar = ({board}) => {
         })
       }))}>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-          <Chip label= {board?.title}
-            variant="outlined"
-            icon={<AutoAwesomeMosaicIcon />}
-            clickable
-            sx={MENU_STYLE}
-          />
+          <Tooltip title={board?.description}>
+            <Chip label={board?.title}
+              variant="outlined"
+              icon={<AutoAwesomeMosaicIcon />}
+              clickable
+              sx={MENU_STYLE}
+            />
+          </Tooltip>
           <Chip
-            label= {capitallizeFirstLetter(board?.type)}
+            label={capitallizeFirstLetter(board?.type)}
             variant="outlined"
             icon={<PublicIcon />}
             clickable
