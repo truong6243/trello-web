@@ -176,7 +176,7 @@ const BoardContent = ({ board }) => {
         height: theme.trello.boardContentHeight,
         width: '100%',
         display: 'flex',
-        p: '10px 0',
+        p: '10px 10px 10px 0',
         bgcolor: '#1976d2',
         ...theme.applyStyles('dark', {
           bgcolor: '#34495e'

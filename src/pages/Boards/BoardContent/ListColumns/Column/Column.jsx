@@ -22,7 +22,19 @@ import ListCards from './ListCards/ListCards';
 import { mapOrder } from '../../../../../utils/fomatter';
 import { useSortable } from '@dnd-kit/react/sortable';
 import { CollisionPriority } from '@dnd-kit/abstract';
+import TextField from '@mui/material/TextField';
+import CloseIcon from '@mui/icons-material/Close';
+
 const Column = ({ column, index, isOverLay }) => {
+  const [openNewCardForm, setopenNewCardForm] = useState(false)
+  const [newCardTitle, setNewCardTitle] = useState('')
+  const toggleOpenNewCardForm = () => setopenNewCardForm(!openNewCardForm)
+  const addNewCard = () => {
+    if (!newCardTitle) return
+    // goi API
+    toggleOpenNewCardForm()
+    setNewCardTitle('')
+  }
   const sortable = useSortable({
     id: column._id,
     index: index,
@@ -53,9 +65,9 @@ const Column = ({ column, index, isOverLay }) => {
   };
   return (
     <Box
-      style= {dndkitStyle}
+      style={dndkitStyle}
       ref={isOverLay ? null : sortable.ref}
-      sx={(theme => ({  
+      sx={(theme => ({
         minWidth: '300px',
         maxWidth: '300px',
         borderRadius: '8px',
@@ -144,16 +156,52 @@ const Column = ({ column, index, isOverLay }) => {
       <Box
         sx={theme => ({
           height: theme.trello.columnFooterHeight,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
           paddingX: 2
         })}
       >
-        <Button startIcon={<AddCardIcon />}>Add new card</Button>
-        <Tooltip title='Drag to move' sx={{ cursor: 'pointer' }}>
-          <DragHandleIcon />
-        </Tooltip>
+        {
+          !openNewCardForm
+            ? <Box sx={{ height: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Button onClick={toggleOpenNewCardForm} startIcon={<AddCardIcon />}>Add new card</Button>
+              <Tooltip title='Drag to move' sx={{ cursor: 'pointer' }}>
+                <DragHandleIcon />
+              </Tooltip>
+            </Box>
+            : <Box sx={{display: 'flex', gap: 2}}>
+              <TextField
+                label="Enter column title..."
+                type="text"
+                size="small"
+                variant='outlined'
+                autoFocus
+                value={newCardTitle}
+                onChange={(e) => setNewCardTitle(e.target.value)}
+                sx={{
+                  maxWidth: '250px',
+                }}
+              />
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Button
+                  onClick={addNewCard}
+                  variant='contained' color='success' size='small'
+                  sx={{
+                    boxShadow: 'none',
+                    border: '0.5px solid',
+                    borderColor: (theme) => theme.palette.success.main,
+                    '&:hover': { bgcolor: (theme) => theme.palette.success.main }
+                  }}
+                >Add</Button>
+                <CloseIcon
+                  onClick={toggleOpenNewCardForm}
+                  fontSize="small"
+                  sx={{
+                    cursor: 'pointer',
+                    color: theme => theme.palette.warning.light
+                  }} />
+              </Box>
+            </Box>
+        }
+
       </Box>
     </Box>
   )
