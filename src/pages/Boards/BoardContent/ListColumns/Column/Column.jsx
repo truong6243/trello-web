@@ -24,13 +24,17 @@ import { useSortable } from '@dnd-kit/react/sortable';
 import { CollisionPriority } from '@dnd-kit/abstract';
 import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
+import {toast} from 'react-toastify'
 
 const Column = ({ column, index, isOverLay }) => {
   const [openNewCardForm, setopenNewCardForm] = useState(false)
   const [newCardTitle, setNewCardTitle] = useState('')
   const toggleOpenNewCardForm = () => setopenNewCardForm(!openNewCardForm)
   const addNewCard = () => {
-    if (!newCardTitle) return
+    if (!newCardTitle) {
+      toast.error('Please enter Card Title!', {position: 'top-right'})
+      return
+    }
     // goi API
     toggleOpenNewCardForm()
     setNewCardTitle('')
