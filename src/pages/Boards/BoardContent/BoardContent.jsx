@@ -8,6 +8,7 @@ import Column from './ListColumns/Column/Column';
 import Card from './ListColumns/Column/ListCards/Card/Card';
 import { arrayMove } from '@dnd-kit/sortable';
 import { cloneDeep } from 'lodash'
+
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
   CARD: 'ACTIVE_DRAG_ITEM_TPYE_CARD'
@@ -26,7 +27,7 @@ const reorderCardsInColumn = (cards, activeCardId, overIndex) => {
   return arrayMove(cards, oldIndex, newIndex)
 }
 
-const BoardContent = ({ board }) => {
+const BoardContent = ({ board, createNewColumn, createNewCard }) => {
   const [activeDragItemId, setActiveDragItemId] = useState(null)
   const [activeDragItemType, setActiveDragItemType] = useState(null)
   const [activeDragItemData, setActiveDragItemData] = useState(null)
@@ -182,7 +183,11 @@ const BoardContent = ({ board }) => {
           bgcolor: '#34495e'
         })
       }))}>
-        <ListColumn columns={orderedColumns} />
+        <ListColumn
+          columns={orderedColumns}
+          createNewColumn={createNewColumn}
+          createNewCard={createNewCard}
+        />
         <DragOverlay dropAnimation={{ duration: DROP_ANIMATION_DURATION, easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)', }}>
           {(activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) && <Column column={activeDragItemData} isOverLay />}
           {(activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) &&

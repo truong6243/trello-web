@@ -24,18 +24,19 @@ import { useSortable } from '@dnd-kit/react/sortable';
 import { CollisionPriority } from '@dnd-kit/abstract';
 import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 
-const Column = ({ column, index, isOverLay }) => {
+const Column = ({ column, index, isOverLay, createNewCard }) => {
   const [openNewCardForm, setopenNewCardForm] = useState(false)
   const [newCardTitle, setNewCardTitle] = useState('')
   const toggleOpenNewCardForm = () => setopenNewCardForm(!openNewCardForm)
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
-      toast.error('Please enter Card Title!', {position: 'top-right'})
+      toast.error('Please enter Card Title!', { position: 'top-right' })
       return
     }
     // goi API
+    await createNewCard({ title: newCardTitle, columnId: column._id })
     toggleOpenNewCardForm()
     setNewCardTitle('')
   }
@@ -171,7 +172,7 @@ const Column = ({ column, index, isOverLay }) => {
                 <DragHandleIcon />
               </Tooltip>
             </Box>
-            : <Box sx={{display: 'flex', gap: 2}}>
+            : <Box sx={{ display: 'flex', gap: 2 }}>
               <TextField
                 label="Enter column title..."
                 type="text"
