@@ -5,18 +5,19 @@ import Button from '@mui/material/Button';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 
-const ListColumn = ({ columns }) => {
+const ListColumn = ({ columns, createNewColumn, createNewCard }) => {
   const [openNewColumnForm, setopenNewColumnForm] = useState(false)
   const [newColumnTitle, setNewColumnTitle] = useState('')
   const toggleOpenNewColumnForm = () => setopenNewColumnForm(!openNewColumnForm)
-  const addNewColumn = () => {
+  const addNewColumn = async () => {
     if (!newColumnTitle) {
       toast.error('Please enter Column Title!')
       return
     }
     // goi API
+    await createNewColumn({ title: newColumnTitle })
     toggleOpenNewColumnForm()
     setNewColumnTitle('')
   }
@@ -33,7 +34,7 @@ const ListColumn = ({ columns }) => {
         m: 2
       },
     }}>
-      {columns?.map((column, index) => <Column key={column._id} column={column} index={index} />)}
+      {columns?.map((column, index) => <Column key={column._id} column={column} index={index} createNewCard={createNewCard} />)}
 
       {/* Add new column */}
       {!openNewColumnForm
