@@ -2,10 +2,17 @@ import Container from '@mui/material/Container'
 import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
-// import { mockData } from '../../apis/mock-data'
 import { useEffect, useState } from 'react'
 import { fecthBoardDetailsAPI } from '~/apis'
-import { createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI } from '~/apis/index'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import CircularProgress from '@mui/material/CircularProgress';
+import {
+  createNewColumnAPI,
+  createNewCardAPI,
+  updateBoardDetailsAPI,
+  updateColumnDetailsAPI
+} from '~/apis/index'
 
 function Board() {
   const [board, setBoard] = useState(null)
@@ -46,6 +53,26 @@ function Board() {
     await updateBoardDetailsAPI(newBoard._id, { columnOrderIds: dndOrderedColumnsIds })
   }
 
+  const moveCardInTheSameColumn = (reorderedCards, reorderedCardIds, columnId) => {
+    const newBoard = { ...board }
+    const columnToUpdate = newBoard.columns.find(column => column._id === columnId)
+    if (columnToUpdate) {
+      columnToUpdate.cards = reorderedCards
+      columnToUpdate.cardOrderIds = reorderedCardIds
+      setBoard(newBoard)
+    }
+    updateColumnDetailsAPI(columnId, { cardOrderIds: reorderedCardIds })
+  }
+
+  if (!board) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: '20px' }}>
+        <CircularProgress size="3rem" aria-label="Loading…" />
+        <Typography>Loading Board...</Typography>
+      </Box>
+    )
+  }
+
   return (
     <>
       <Container disableGutters maxWidth={false} >
@@ -56,6 +83,7 @@ function Board() {
           createNewColumn={createNewColumn}
           createNewCard={createNewCard}
           moveColumns={moveColumns}
+          moveCardInTheSameColumn={moveCardInTheSameColumn}
         />
       </Container>
     </>

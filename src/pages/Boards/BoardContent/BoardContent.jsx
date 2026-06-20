@@ -27,7 +27,12 @@ const reorderCardsInColumn = (cards, activeCardId, overIndex) => {
   return arrayMove(cards, oldIndex, newIndex)
 }
 
-const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) => {
+const BoardContent = ({ board,
+  createNewColumn,
+  createNewCard,
+  moveColumns,
+  moveCardInTheSameColumn
+}) => {
   const [activeDragItemId, setActiveDragItemId] = useState(null)
   const [activeDragItemType, setActiveDragItemType] = useState(null)
   const [activeDragItemData, setActiveDragItemData] = useState(null)
@@ -132,8 +137,8 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) =>
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
       const { initialIndex, index: newIndex } = source
       const dndOrderedColumns = arrayMove(orderedColumns, initialIndex, newIndex)
-      moveColumns(dndOrderedColumns)
       setOrderedColumns(dndOrderedColumns)
+      moveColumns(dndOrderedColumns)
     } else if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
       const initialGroup = source?.initialGroup
       const group = source?.group
@@ -147,16 +152,21 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) =>
         typeof newIndex === 'number' &&
         initialIndex !== newIndex
       ) {
-        setOrderedColumns(pre => {
-          const nextColumns = cloneDeep(pre)
-          const column = nextColumns.find(col => col._id === group)
-          if (!column) return pre
-          const reorderedCards = reorderCardsInColumn(column.cards, cardId, newIndex)
-          if (reorderedCards === column.cards) return pre
-          column.cards = reorderedCards
-          column.cardOrderIds = reorderedCards.map(card => card._id)
-          return nextColumns
-        })
+        const oldColumn = orderedColumns.find(c => c._id === initialGroup)
+        if (oldColumn) {
+          const reorderedCards = reorderCardsInColumn(oldColumn.cards, cardId, newIndex)
+          const reorderedCardIds = reorderedCards.map(card => card._id)
+
+          setOrderedColumns(pre => {
+            const nextColumns = cloneDeep(pre)
+            const column = nextColumns.find(col => col._id === initialGroup)
+            if (!column) return pre
+            column.cards = reorderedCards
+            column.cardOrderIds = reorderedCardIds
+            return nextColumns
+          })
+          moveCardInTheSameColumn(reorderedCards, reorderedCardIds, initialGroup)
+        }
       }
     }
     clearDragStateTimeoutRef.current = setTimeout(() => {
