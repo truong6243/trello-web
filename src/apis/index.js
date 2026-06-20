@@ -6,6 +6,11 @@ export const fecthBoardDetailsAPI = async (boardId) => {
   return res.data
 }
 
+export const updateBoardDetailsAPI = async (boardId, updateData) => {
+  const res = await axios.put(`${API_ROOT}/v1/boards/${boardId}`, updateData)
+  return res.data
+}
+
 // Column API
 export const createNewColumnAPI = async (columnData) => {
   const res = await axios.post(`${API_ROOT}/v1/columns`, columnData)

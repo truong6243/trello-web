@@ -27,7 +27,7 @@ const reorderCardsInColumn = (cards, activeCardId, overIndex) => {
   return arrayMove(cards, oldIndex, newIndex)
 }
 
-const BoardContent = ({ board, createNewColumn, createNewCard }) => {
+const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) => {
   const [activeDragItemId, setActiveDragItemId] = useState(null)
   const [activeDragItemType, setActiveDragItemType] = useState(null)
   const [activeDragItemData, setActiveDragItemData] = useState(null)
@@ -132,6 +132,7 @@ const BoardContent = ({ board, createNewColumn, createNewCard }) => {
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
       const { initialIndex, index: newIndex } = source
       const dndOrderedColumns = arrayMove(orderedColumns, initialIndex, newIndex)
+      moveColumns(dndOrderedColumns)
       setOrderedColumns(dndOrderedColumns)
     } else if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
       const initialGroup = source?.initialGroup
