@@ -5,7 +5,7 @@ import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '../../apis/mock-data'
 import { useEffect, useState } from 'react'
 import { fecthBoardDetailsAPI } from '~/apis'
-import { createNewColumnAPI, createNewCardAPI } from '~/apis/index'
+import { createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI } from '~/apis/index'
 
 function Board() {
   const [board, setBoard] = useState(null)
@@ -35,6 +35,17 @@ function Board() {
     }
   }
 
+  const moveColumns = async (dndOrderedColumns) => {
+    const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id)
+    const newBoard = { ...board }
+    newBoard.columns = dndOrderedColumns
+    newBoard.columnOrderIds = dndOrderedColumnsIds
+    setBoard(newBoard)
+
+    // Goi API update board
+    await updateBoardDetailsAPI(newBoard._id, { columnOrderIds: dndOrderedColumnsIds })
+  }
+
   return (
     <>
       <Container disableGutters maxWidth={false} >
@@ -44,6 +55,7 @@ function Board() {
           board={board}
           createNewColumn={createNewColumn}
           createNewCard={createNewCard}
+          moveColumns={moveColumns}
         />
       </Container>
     </>
