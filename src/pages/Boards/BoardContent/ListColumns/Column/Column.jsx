@@ -59,7 +59,7 @@ const Column = ({ column, index, isOverLay, createNewCard }) => {
     userSelect: 'none',
   } : {};
 
-  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+  const orderedCards = column.cards
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
