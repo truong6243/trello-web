@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box'
 import ListColumn from './ListColumns/ListColumn';
-import { mapOrder } from '../../../utils/fomatter';
 import { DragDropProvider, DragOverlay } from '@dnd-kit/react';
 import { defaultPreset, PointerSensor, PointerActivationConstraints } from '@dnd-kit/dom';
 import { useEffect, useRef, useState } from 'react';
@@ -31,7 +30,8 @@ const BoardContent = ({ board,
   createNewColumn,
   createNewCard,
   moveColumns,
-  moveCardInTheSameColumn
+  moveCardInTheSameColumn,
+  moveCardToDifferentColumn
 }) => {
   const [activeDragItemId, setActiveDragItemId] = useState(null)
   const [activeDragItemType, setActiveDragItemType] = useState(null)
@@ -40,9 +40,10 @@ const BoardContent = ({ board,
   const [orderedColumns, setOrderedColumns] = useState([])
   const clearDragStateTimeoutRef = useRef(null)
   const lastDragOverSignatureRef = useRef(null)
+  const draggedCardInitialGroupRef = useRef(null)
 
   useEffect(() => {
-    setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
+    setOrderedColumns(board?.columns || [])
   }, [board])
 
   useEffect(() => {
@@ -68,6 +69,7 @@ const BoardContent = ({ board,
       clearTimeout(clearDragStateTimeoutRef.current)
       clearDragStateTimeoutRef.current = null
     }
+    draggedCardInitialGroupRef.current = event?.operation?.source?.group || event?.operation?.source?.initialGroup || null
     setActiveDragItemId(event?.operation?.source?.id)
     setActiveDragItemType(event?.operation?.source?.data?.columnId ? ACTIVE_DRAG_ITEM_TYPE.CARD :
       ACTIVE_DRAG_ITEM_TYPE.COLUMN
@@ -133,15 +135,15 @@ const BoardContent = ({ board,
     // 2. Nếu người dùng hủy thao tác kéo thả thì dừng lại
     if (canceled) return;
     // 3. Lấy source và target từ operation
-    const { source } = operation;
+    const { source, target } = operation;
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
       const { initialIndex, index: newIndex } = source
       const dndOrderedColumns = arrayMove(orderedColumns, initialIndex, newIndex)
       setOrderedColumns(dndOrderedColumns)
       moveColumns(dndOrderedColumns)
     } else if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
-      const initialGroup = source?.initialGroup
-      const group = source?.group
+      const initialGroup = draggedCardInitialGroupRef.current
+      const group = target?.group || source?.group
       const { initialIndex, index: newIndex, id: cardId } = source
       // Cross-column moves are applied in onDragOver; only finalize same-column order here.
       if (
@@ -167,8 +169,19 @@ const BoardContent = ({ board,
           })
           moveCardInTheSameColumn(reorderedCards, reorderedCardIds, initialGroup)
         }
+      } else if (initialGroup && group && initialGroup !== group) {
+        const overColumn = orderedColumns.find(c => c._id === group)
+        if (overColumn) {
+          moveCardToDifferentColumn(
+            cardId,
+            initialGroup,
+            group,
+            orderedColumns
+          );
+        }
       }
     }
+    draggedCardInitialGroupRef.current = null
     clearDragStateTimeoutRef.current = setTimeout(() => {
       setActiveDragItemId(null)
       setActiveDragItemType(null)

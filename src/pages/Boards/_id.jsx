@@ -11,14 +11,20 @@ import {
   createNewColumnAPI,
   createNewCardAPI,
   updateBoardDetailsAPI,
-  updateColumnDetailsAPI
+  updateColumnDetailsAPI,
+  moveCardToDifferentColumnAPI
 } from '~/apis/index'
+import {mapOrder} from '~/utils/fomatter'
 
 function Board() {
   const [board, setBoard] = useState(null)
   const boardId = '6a2a61f941ffd538d9de606e'
   useEffect(() => {
     fecthBoardDetailsAPI(boardId).then(board => {
+      board.columns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
+      board.columns.forEach(column => {
+        column.cards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+      })
       setBoard(board)
     })
   }, [])
@@ -54,6 +60,7 @@ function Board() {
   }
 
   const moveCardInTheSameColumn = (reorderedCards, reorderedCardIds, columnId) => {
+    console.log('keo tha card cùng column')
     const newBoard = { ...board }
     const columnToUpdate = newBoard.columns.find(column => column._id === columnId)
     if (columnToUpdate) {
@@ -62,6 +69,32 @@ function Board() {
       setBoard(newBoard)
     }
     updateColumnDetailsAPI(columnId, { cardOrderIds: reorderedCardIds })
+  }
+
+  // Di chuyển card từ cột này sang cột khác
+  // Bước 1: Cập nhật mảng cardOrderIds của cột cũ (bản chất là xóa id card ra khỏi mảng)
+  // Bước 2: Cập nhật mảng cardOrderIds của cột mới (thêm id card vào mảng)
+  // Bước 3: Cập nhật lại columnId của card
+  const moveCardToDifferentColumn = (
+    cardId,
+    initialGroup,
+    group,
+    dndOrderedColumns
+  ) => {
+    const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id)
+    const newBoard = { ...board }
+    newBoard.columns = dndOrderedColumns
+    newBoard.columnOrderIds = dndOrderedColumnsIds
+    setBoard(newBoard)
+
+    // Goi API update board
+    moveCardToDifferentColumnAPI({
+      currentCardId: cardId,
+      prevColumnId: initialGroup,
+      prevCardOrderIds: dndOrderedColumns.find(c => c._id === initialGroup)?.cardOrderIds,
+      nextColumnId: group,
+      nextCardOrderIds: dndOrderedColumns.find(c => c._id === group)?.cardOrderIds,
+    })
   }
 
   if (!board) {
@@ -84,6 +117,7 @@ function Board() {
           createNewCard={createNewCard}
           moveColumns={moveColumns}
           moveCardInTheSameColumn={moveCardInTheSameColumn}
+          moveCardToDifferentColumn={moveCardToDifferentColumn}
         />
       </Container>
     </>
