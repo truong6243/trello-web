@@ -7,11 +7,14 @@ import { ThemeProvider } from '@mui/material/styles'
 import theme from './theme.js'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ConfirmProvider } from "material-ui-confirm";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ThemeProvider theme={theme}>
     <CssBaseline />
-    <App />
-    <ToastContainer />
+    <ConfirmProvider>
+      <App />
+      <ToastContainer />
+    </ConfirmProvider>
   </ThemeProvider>
 )
