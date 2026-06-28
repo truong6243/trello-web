@@ -19,27 +19,40 @@ import AddCardIcon from '@mui/icons-material/AddCard';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import Button from '@mui/material/Button';
 import ListCards from './ListCards/ListCards';
-import { mapOrder } from '../../../../../utils/fomatter';
 import { useSortable } from '@dnd-kit/react/sortable';
 import { CollisionPriority } from '@dnd-kit/abstract';
 import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify'
+import { useConfirm } from "material-ui-confirm";
 
-const Column = ({ column, index, isOverLay, createNewCard }) => {
+const Column = ({ column, index, isOverLay, createNewCard, deleteColumnDetails }) => {
   const [openNewCardForm, setopenNewCardForm] = useState(false)
   const [newCardTitle, setNewCardTitle] = useState('')
   const toggleOpenNewCardForm = () => setopenNewCardForm(!openNewCardForm)
+
   const addNewCard = async () => {
     if (!newCardTitle) {
       toast.error('Please enter Card Title!', { position: 'top-right' })
       return
     }
-    // goi API
     await createNewCard({ title: newCardTitle, columnId: column._id })
     toggleOpenNewCardForm()
     setNewCardTitle('')
   }
+
+  const confirm = useConfirm()
+  const handleDelete = async () => {
+    const { confirmed, reason } = await confirm({
+      description: `This will permanently delete column and cards`,
+    });
+    if (confirmed) {
+      
+      console.log("🚀 ~ handleDelete ~ confirmed:", confirmed)
+      deleteColumnDetails(column._id)
+    }
+  }
+
   const sortable = useSortable({
     id: column._id,
     index: index,
@@ -108,14 +121,22 @@ const Column = ({ column, index, isOverLay, createNewCard }) => {
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
+          onClick={handleClose}
           slotProps={{
             list: {
               'aria-labelledby': 'basic-column-dropdown',
             },
           }}
         >
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
+          <MenuItem
+            sx={{
+              '&:hover': {
+                color: 'success.light',
+                '& .add-item-icon': { color: 'success.light' }
+              }
+            }}
+            onClick={toggleOpenNewCardForm} >
+            <ListItemIcon className='add-item-icon'>
               <AddCardIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText>Add new card</ListItemText>
@@ -140,11 +161,16 @@ const Column = ({ column, index, isOverLay, createNewCard }) => {
           </MenuItem>
 
           <Divider />
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
+          <MenuItem
+            onClick={handleDelete}
+            sx={{
+              '&:hover': { color: 'warning.dark', '& .delete-item-icon': { color: 'warning.dark' } }
+            }}
+          >
+            <ListItemIcon className='delete-item-icon'>
               <DeleteOutlineIcon fontSize="small" />
             </ListItemIcon>
-            <ListItemText>Remove this column</ListItemText>
+            <ListItemText>Delete this column</ListItemText>
           </MenuItem>
           <MenuItem onClick={handleClose}>
             <ListItemIcon>

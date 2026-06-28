@@ -12,9 +12,11 @@ import {
   createNewCardAPI,
   updateBoardDetailsAPI,
   updateColumnDetailsAPI,
-  moveCardToDifferentColumnAPI
+  moveCardToDifferentColumnAPI,
+  deleteColumnDetailsAPI
 } from '~/apis/index'
-import {mapOrder} from '~/utils/fomatter'
+import { mapOrder } from '~/utils/fomatter'
+import { toast } from 'react-toastify'
 
 function Board() {
   const [board, setBoard] = useState(null)
@@ -35,6 +37,18 @@ function Board() {
     newBoard.columns.push(createdColumn)
     newBoard.columnOrderIds.push(createdColumn._id)
     setBoard(newBoard)
+  }
+
+  const deleteColumnDetails = async (columnId) => {
+    const newBoard = { ...board }
+    newBoard.columns = newBoard.columns.filter(column => column._id !== columnId)
+    newBoard.columnOrderIds = newBoard.columnOrderIds.filter(id => id !== columnId)
+    setBoard(newBoard)
+
+    // Goi API
+    await deleteColumnDetailsAPI(columnId).then((res) => {
+      toast.success(res.deleteResult)
+    })
   }
 
   const createNewCard = async (cardData) => {
@@ -118,6 +132,7 @@ function Board() {
           moveColumns={moveColumns}
           moveCardInTheSameColumn={moveCardInTheSameColumn}
           moveCardToDifferentColumn={moveCardToDifferentColumn}
+          deleteColumnDetails={deleteColumnDetails}
         />
       </Container>
     </>
