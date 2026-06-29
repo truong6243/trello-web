@@ -47,8 +47,6 @@ const Column = ({ column, index, isOverLay, createNewCard, deleteColumnDetails }
       description: `This will permanently delete column and cards`,
     });
     if (confirmed) {
-      
-      console.log("🚀 ~ handleDelete ~ confirmed:", confirmed)
       deleteColumnDetails(column._id)
     }
   }

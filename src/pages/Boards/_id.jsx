@@ -74,7 +74,6 @@ function Board() {
   }
 
   const moveCardInTheSameColumn = (reorderedCards, reorderedCardIds, columnId) => {
-    console.log('keo tha card cùng column')
     const newBoard = { ...board }
     const columnToUpdate = newBoard.columns.find(column => column._id === columnId)
     if (columnToUpdate) {

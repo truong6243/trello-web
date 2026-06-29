@@ -12,7 +12,10 @@ export const updateBoardDetailsAPI = async (boardId, updateData) => {
 }
 
 export const moveCardToDifferentColumnAPI = async (updateData) => {
-  const res = await axios.put(`${API_ROOT}/v1/boards/supports/moving_card`, updateData)
+  const res = await axios.put(
+    `${API_ROOT}/v1/boards/supports/moving_card`,
+    updateData
+  )
   return res.data
 }
 
@@ -37,4 +40,3 @@ export const createNewCardAPI = async (cardData) => {
   const res = await axios.post(`${API_ROOT}/v1/cards`, cardData)
   return res.data
 }
-
