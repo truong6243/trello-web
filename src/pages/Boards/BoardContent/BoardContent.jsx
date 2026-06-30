@@ -27,12 +27,9 @@ const reorderCardsInColumn = (cards, activeCardId, overIndex) => {
 }
 
 const BoardContent = ({ board,
-  createNewColumn,
-  createNewCard,
   moveColumns,
   moveCardInTheSameColumn,
   moveCardToDifferentColumn,
-  deleteColumnDetails
 }) => {
   const [activeDragItemId, setActiveDragItemId] = useState(null)
   const [activeDragItemType, setActiveDragItemType] = useState(null)
@@ -210,9 +207,6 @@ const BoardContent = ({ board,
       }))}>
         <ListColumn
           columns={orderedColumns}
-          createNewColumn={createNewColumn}
-          createNewCard={createNewCard}
-          deleteColumnDetails={deleteColumnDetails}
         />
         <DragOverlay dropAnimation={{ duration: DROP_ANIMATION_DURATION, easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)', }}>
           {(activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) && <Column column={activeDragItemData} isOverLay />}

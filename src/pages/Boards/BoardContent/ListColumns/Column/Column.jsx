@@ -25,29 +25,51 @@ import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify'
 import { useConfirm } from "material-ui-confirm";
+import { createNewCardAPI, deleteColumnDetailsAPI } from '~/apis/index'
+import { cloneDeep } from 'lodash'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectorCurrentActiveBoard, updateCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 
-const Column = ({ column, index, isOverLay, createNewCard, deleteColumnDetails }) => {
+const Column = ({ column, index, isOverLay }) => {
   const [openNewCardForm, setopenNewCardForm] = useState(false)
   const [newCardTitle, setNewCardTitle] = useState('')
   const toggleOpenNewCardForm = () => setopenNewCardForm(!openNewCardForm)
+  const dispatch = useDispatch()
+  const board = useSelector(selectorCurrentActiveBoard)
 
   const addNewCard = async () => {
     if (!newCardTitle) {
       toast.error('Please enter Card Title!', { position: 'top-right' })
       return
     }
-    await createNewCard({ title: newCardTitle, columnId: column._id })
+    const createdCard = await createNewCardAPI({ title: newCardTitle, columnId: column._id, boardId: board._id })
+    const newBoard = cloneDeep(board)
+    const columnToUpdate = newBoard.columns.find(column => column._id === createdCard.columnId)
+    if (columnToUpdate) {
+      columnToUpdate.cards.push(createdCard)
+      columnToUpdate.cardOrderIds.push(createdCard._id)
+      dispatch(updateCurrentActiveBoard(newBoard))
+    }
     toggleOpenNewCardForm()
     setNewCardTitle('')
   }
 
   const confirm = useConfirm()
   const handleDelete = async () => {
-    const { confirmed, reason } = await confirm({
+    const { confirmed } = await confirm({
       description: `This will permanently delete column and cards`,
     });
     if (confirmed) {
-      deleteColumnDetails(column._id)
+      const newBoard = { ...board }
+      newBoard.columns = newBoard.columns.filter(col => col._id !== column._id)
+      newBoard.columnOrderIds = newBoard.columnOrderIds.filter(id => id !== column._id)
+
+      dispatch(updateCurrentActiveBoard(newBoard))
+
+      // Goi API
+      await deleteColumnDetailsAPI(column._id).then((res) => {
+        toast.success(res.deleteResult)
+      })
     }
   }
 

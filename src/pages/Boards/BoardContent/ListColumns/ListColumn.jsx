@@ -6,10 +6,16 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify'
+import { createNewColumnAPI } from '~/apis/index'
+import { selectorCurrentActiveBoard, updateCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { cloneDeep } from 'lodash'
 
-const ListColumn = ({ columns, createNewColumn, createNewCard, deleteColumnDetails }) => {
+const ListColumn = ({ columns }) => {
   const [openNewColumnForm, setopenNewColumnForm] = useState(false)
   const [newColumnTitle, setNewColumnTitle] = useState('')
+  const board = useSelector(selectorCurrentActiveBoard)
+  const dispatch = useDispatch()
   const toggleOpenNewColumnForm = () => setopenNewColumnForm(!openNewColumnForm)
   const addNewColumn = async () => {
     if (!newColumnTitle) {
@@ -17,7 +23,12 @@ const ListColumn = ({ columns, createNewColumn, createNewCard, deleteColumnDetai
       return
     }
     // goi API
-    await createNewColumn({ title: newColumnTitle })
+    const createdColumn = await createNewColumnAPI({ title: newColumnTitle, boardId: board._id })
+    const newBoard = cloneDeep(board) // Immutability in redux
+    newBoard.columns.push(createdColumn)
+    newBoard.columnOrderIds.push(createdColumn._id)
+
+    dispatch(updateCurrentActiveBoard(newBoard))
     toggleOpenNewColumnForm()
     setNewColumnTitle('')
   }
@@ -34,7 +45,7 @@ const ListColumn = ({ columns, createNewColumn, createNewCard, deleteColumnDetai
         m: 2
       },
     }}>
-      {columns?.map((column, index) => <Column key={column._id} column={column} index={index} createNewCard={createNewCard} deleteColumnDetails={deleteColumnDetails} />)}
+      {columns?.map((column, index) => <Column key={column._id} column={column} index={index} />)}
 
       {/* Add new column */}
       {!openNewColumnForm
