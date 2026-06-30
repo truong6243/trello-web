@@ -1,3 +1,6 @@
+import axios from 'axios'
+import { API_ROOT } from '~/utils/constants'
+import { mapOrder } from '~/utils/fomatter'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 // khởi tạo giá trị của một slice trong redux
 const initialState = {
@@ -36,8 +39,6 @@ export const activeBoardSlice = createSlice({
       board.columns.forEach((column) => {
         column.cards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
       })
-      setBoard(board)
-
       state.currentActiveBoard = board
     })
   }

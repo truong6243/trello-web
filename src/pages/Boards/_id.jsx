@@ -3,7 +3,6 @@ import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import { useEffect, useState } from 'react'
-import { fecthBoardDetailsAPI } from '~/apis'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import CircularProgress from '@mui/material/CircularProgress';
@@ -15,21 +14,21 @@ import {
   moveCardToDifferentColumnAPI,
   deleteColumnDetailsAPI
 } from '~/apis/index'
-import { mapOrder } from '~/utils/fomatter'
 import { toast } from 'react-toastify'
+import {
+  fecthBoardDetailsAPI,
+  updateCurrentActiveBoard,
+  selectorCurrentActiveBoard
+} from '~/redux/activeBoard/activeBoardSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 function Board() {
+  const dispatch = useDispatch()
   const [board, setBoard] = useState(null)
-  const boardId = '6a2a61f941ffd538d9de606e'
   useEffect(() => {
-    fecthBoardDetailsAPI(boardId).then(board => {
-      board.columns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
-      board.columns.forEach(column => {
-        column.cards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
-      })
-      setBoard(board)
-    })
-  }, [])
+    const boardId = '6a2a61f941ffd538d9de606e'
+    dispatch(fecthBoardDetailsAPI(boardId))
+  }, [dispatch])
 
   const createNewColumn = async (columnData) => {
     const createdColumn = await createNewColumnAPI({ ...columnData, boardId: board._id })
