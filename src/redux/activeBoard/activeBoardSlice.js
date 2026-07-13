@@ -1,5 +1,5 @@
-import axios from 'axios'
 import { API_ROOT } from '~/utils/constants'
+import authorizeAxiosInstance from '~/utils/authorizeAxios'
 import { mapOrder } from '~/utils/fomatter'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 // khởi tạo giá trị của một slice trong redux
@@ -12,7 +12,9 @@ const initialState = {
 export const fecthBoardDetailsAPI = createAsyncThunk(
   'activeBoard/fecthBoardDetailsAPI',
   async (boardId) => {
-    const res = await axios.get(`${API_ROOT}/v1/boards/${boardId}`)
+    const res = await authorizeAxiosInstance.get(
+      `${API_ROOT}/v1/boards/${boardId}`
+    )
     return res.data
   }
 )

@@ -233,6 +233,7 @@ const Column = ({ column, index, isOverLay }) => {
               />
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Button
+                  className='interceptor-loading'
                   onClick={addNewCard}
                   variant='contained' color='success' size='small'
                   sx={{
