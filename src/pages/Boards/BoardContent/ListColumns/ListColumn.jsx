@@ -58,7 +58,15 @@ const ListColumn = ({ columns }) => {
           ml: 2
         }}
         >
-          <Button sx={{ color: 'white', width: '100%', justifyContent: 'flex-start', pl: 2.5, py: 1 }} startIcon={<NoteAddIcon />}>Add new column</Button>
+          <Button
+            sx={{
+              color: 'white',
+              width: '100%',
+              justifyContent: 'flex-start',
+              pl: 2.5, py: 1
+            }}
+            startIcon={<NoteAddIcon />
+            }>Add new column</Button>
         </Box>
         : <Box sx={{
           minWidth: '250px',
@@ -99,6 +107,7 @@ const ListColumn = ({ columns }) => {
           />
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Button
+              className='interceptor-loading'
               onClick={addNewColumn}
               variant='contained' color='success' size='small'
               sx={{
