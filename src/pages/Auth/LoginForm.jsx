@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Avatar from '@mui/material/Avatar'
@@ -11,6 +11,9 @@ import TextField from '@mui/material/TextField'
 import Zoom from '@mui/material/Zoom'
 import Alert from '@mui/material/Alert'
 import { useForm } from "react-hook-form"
+import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
+import { loginUserApi } from '~/redux/user/userSlice'
 
 import {
   FIELD_REQUIRED_MESSAGE,
@@ -27,12 +30,24 @@ function LoginForm() {
     handleSubmit,
     formState: { errors },
   } = useForm()
-
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   let [searchParams] = useSearchParams()
   const registeredEmail = searchParams.get('registerdEmail')
   const verifiedEmail = searchParams.get('verifiedEmail')
 
   const submitLogIn = (data) => {
+    const { email, password } = data
+        toast.promise(
+          dispatch(loginUserApi({ email, password })),
+          { pending: "Logging in..." }
+        ).then((res) => {
+          console.log('res', res)
+          // kiểm tra không có lỗi mới redirect
+          if (!res.error) {
+            navigate('/')
+          }
+        })
   }
   return (
     <form onSubmit={handleSubmit(submitLogIn)}>
