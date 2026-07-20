@@ -42,7 +42,6 @@ function LoginForm() {
           dispatch(loginUserApi({ email, password })),
           { pending: "Logging in..." }
         ).then((res) => {
-          console.log('res', res)
           // kiểm tra không có lỗi mới redirect
           if (!res.error) {
             navigate('/')
