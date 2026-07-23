@@ -57,7 +57,7 @@ const Column = ({ column, index, isOverLay }) => {
   const confirm = useConfirm()
   const handleDelete = async () => {
     const { confirmed } = await confirm({
-      description: `This will permanently delete column and cards`,
+      title: 'Log out of your account',
     });
     if (confirmed) {
       const newBoard = { ...board }
