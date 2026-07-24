@@ -72,3 +72,8 @@ export const verifyUserApi = async (data) => {
   ,{theme: 'colored'})
   return res.data
 }
+
+export const refreshTokenApi = async () => {
+  const res = await authorizeAxiosInstance.get(`${API_ROOT}/v1/users/refresh_token`)
+  return res.data
+}
