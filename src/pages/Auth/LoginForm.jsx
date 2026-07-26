@@ -13,7 +13,7 @@ import Alert from '@mui/material/Alert'
 import { useForm } from "react-hook-form"
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
-import { loginUserApi } from '~/redux/user/userSlice'
+import { loginUserAPI } from '~/redux/user/userSlice'
 
 import {
   FIELD_REQUIRED_MESSAGE,
@@ -39,7 +39,7 @@ function LoginForm() {
   const submitLogIn = (data) => {
     const { email, password } = data
         toast.promise(
-          dispatch(loginUserApi({ email, password })),
+          dispatch(loginUserAPI({ email, password })),
           { pending: "Logging in..." }
         ).then((res) => {
           // kiểm tra không có lỗi mới redirect

@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { interceptorLoadingElements } from '~/utils/fomatter'
-import { refreshTokenApi } from '~/apis/index'
-import { logoutUserApi } from '~/redux/user/userSlice'
+import { refreshTokenAPI } from '~/apis/index'
+import { logoutUserAPI } from '~/redux/user/userSlice'
 
 /* 
 Không thể import { store } from '~/redux/store/' theo cách thông thường được
@@ -58,7 +58,7 @@ authorizeAxiosInstance.interceptors.response.use(
     // Xử lý refreshToken tự động
     // Trường hợp 1: Nếu nhận mã 401 từ BE, thì gọi api đăng xuát luôn
     if (error?.response?.status === 401) {
-      axiosReduxStore.dispatch(logoutUserApi(false))
+      axiosReduxStore.dispatch(logoutUserAPI(false))
     }
     // Trường hợp 2: nếu như nhận được mã 410 từ BE, thì sẽ gọi api refreshToken để
     // làm mới lại accessToken
@@ -71,14 +71,14 @@ authorizeAxiosInstance.interceptors.response.use(
 
       // kiểm tra nếu chưa có refreshTokenPromise thì thực hiện việc gọi api và gán vào refreshTokenPromise
       if (!refreshTokenPromise) {
-        refreshTokenPromise = refreshTokenApi()
+        refreshTokenPromise = refreshTokenAPI()
           .then((data) => {
             // đồng thời accessToken đã nằm trong httpOnly(xử lý bên BE)
             return data?.accessToken
           })
           .catch((_error) => {
             // nếu có bất kỳ lỗi nào liên quan đến refreshToken thì cho log out luôn
-            axiosReduxStore.dispatch(logoutUserApi())
+            axiosReduxStore.dispatch(logoutUserAPI())
             return Promise.reject(_error)
           })
           .finally(() => {

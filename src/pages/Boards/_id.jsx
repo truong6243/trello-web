@@ -5,7 +5,8 @@ import { useParams } from 'react-router-dom'
 import BoardContent from './BoardContent/BoardContent'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectorCurrentActiveBoard, fecthBoardDetailsAPI } from '~/redux/activeBoard/activeBoardSlice'
+import { cloneDeep } from 'lodash'
+import { selectorCurrentActiveBoard, fecthBoardDetailsAPI, updateCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 import {
   updateBoardDetailsAPI,
   updateColumnDetailsAPI,

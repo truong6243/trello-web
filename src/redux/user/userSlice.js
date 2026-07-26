@@ -9,8 +9,8 @@ const initialState = {
 
 // những hành động gọi API (bất đồng bộ) và cập nhật dữ liệu vào trong redux, dùng
 // middle ware createAsyncThunk đi kèm với extraReducers
-export const loginUserApi = createAsyncThunk(
-  'user/loginUserApi',
+export const loginUserAPI = createAsyncThunk(
+  'user/loginUserAPI',
   async (data) => {
     const res = await authorizeAxiosInstance.post(
       `${API_ROOT}/v1/users/login`,
@@ -20,8 +20,8 @@ export const loginUserApi = createAsyncThunk(
   }
 )
 
-export const logoutUserApi = createAsyncThunk(
-  'user/logoutUserApi',
+export const logoutUserAPI = createAsyncThunk(
+  'user/logoutUserAPI',
   async (showSuccessMessage = true) => {
     const res = await authorizeAxiosInstance.delete(
       `${API_ROOT}/v1/users/logout`
@@ -33,6 +33,16 @@ export const logoutUserApi = createAsyncThunk(
   }
 )
 
+export const updateUserAPI = createAsyncThunk(
+  'user/updateUserAPI',
+  async (data) => {
+    const res = await authorizeAxiosInstance.put(
+      `${API_ROOT}/v1/users/update`, data
+    )
+    return res.data
+  }
+)
+
 // khởi tạo một slice trong kho lưu trữ redux store
 export const userSlice = createSlice({
   name: 'user',
@@ -40,12 +50,16 @@ export const userSlice = createSlice({
   // nơi xử lý dữ liệu đồng bộ
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(loginUserApi.fulfilled, (state, action) => {
+    builder.addCase(loginUserAPI.fulfilled, (state, action) => {
       const user = action.payload
       state.currentUser = user
     })
-    builder.addCase(logoutUserApi.fulfilled, (state) => {
+    builder.addCase(logoutUserAPI.fulfilled, (state) => {
       state.currentUser = null
+    })
+    builder.addCase(updateUserAPI.fulfilled, (state, action) => {
+      const updatedUser = action.payload
+      state.currentUser = updatedUser
     })
   }
 })
