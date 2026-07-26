@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
+import GlobalStyles from '@mui/material/GlobalStyles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
 import theme from './theme.js'
@@ -24,6 +25,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <ThemeProvider theme={theme}>
+          <GlobalStyles styles ={{ a: { textDecoration: 'none' } }}/>
           <CssBaseline />
           <ConfirmProvider>
             <App />

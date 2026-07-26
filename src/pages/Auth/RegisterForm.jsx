@@ -19,7 +19,7 @@ import {
   PASSWORD_CONFIRMATION_MESSAGE
 } from '~/utils/validators'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
-import { registerUserApi } from '~/apis/index'
+import { registerUserAPI } from '~/apis/index'
 import { toast } from 'react-toastify'
 
 function RegisterForm() {
@@ -27,7 +27,7 @@ function RegisterForm() {
   const submitRegister = (data) => {
     const { email, password } = data
     toast.promise(
-      registerUserApi({ email, password }),
+      registerUserAPI({ email, password }),
       { pending: "Registration is in progress..." }
     ).then((user) => {
       navigate(`/login?registerdEmail=${user.email}`)
