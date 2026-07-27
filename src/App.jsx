@@ -6,6 +6,7 @@ import AccountVerification from "./pages/Auth/AccountVerification"; '~/pages/Aut
 import { useSelector } from 'react-redux'
 import { selectorCurrentUser } from '~/redux/user/userSlice'
 import Setting from '~/pages/Settings/Settings'
+import Boards from '~/pages/Boards/index'
 
 const ProtectedRoute = ({ user }) => {
   if (!user) return <Navigate to='/login' replace={true} />
@@ -25,6 +26,7 @@ function App() {
         {/* Outlet sẽ chạy vào các child route trong này */}
         {/* Board Details */}
         <Route path="/boards/:boardId" element={<Board />} />
+        <Route path="/boards" element={<Boards />} />
         {/* User Settings */}
         <Route path="/settings/account" element={<Setting />} />
         <Route path="/settings/security" element={<Setting />} />
