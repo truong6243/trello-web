@@ -6,7 +6,6 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Typography from '@mui/material/Typography';
 import ContentCut from '@mui/icons-material/ContentCut';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useState } from 'react';
@@ -25,10 +24,11 @@ import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify'
 import { useConfirm } from "material-ui-confirm";
-import { createNewCardAPI, deleteColumnDetailsAPI } from '~/apis/index'
+import { createNewCardAPI, deleteColumnDetailsAPI, updateColumnDetailsAPI } from '~/apis/index'
 import { cloneDeep } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectorCurrentActiveBoard, updateCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
+import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 
 const Column = ({ column, index, isOverLay }) => {
   const [openNewCardForm, setopenNewCardForm] = useState(false)
@@ -101,6 +101,19 @@ const Column = ({ column, index, isOverLay }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const onUpdateColumnTitle = (newTitle) => {
+    // goi API update column title va update state redux
+    updateColumnDetailsAPI(column._id, { title: newTitle }).then(() => {
+      const newBoard = cloneDeep(board)
+      const columnToUpdate = newBoard.columns.find(cl => cl._id === column._id)
+      if (columnToUpdate) {
+        columnToUpdate.title = newTitle
+      }
+      dispatch(updateCurrentActiveBoard(newBoard))
+    })
+  }
+
   return (
     <Box
       style={dndkitStyle}
@@ -125,7 +138,10 @@ const Column = ({ column, index, isOverLay }) => {
         alignItems: 'center',
         paddingX: 2
       })}>
-        <Typography variant='h6' sx={{ fontWeight: 'bold', fontSize: '1rem' }}> {column.title} </Typography>
+        <ToggleFocusInput
+          value={column.title}
+          onChangedValue={onUpdateColumnTitle}
+        />
         <Tooltip title='More Options' >
           <IconButton
             id="basic-column-dropdown"
