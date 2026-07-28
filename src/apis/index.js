@@ -7,6 +7,12 @@ import authorizeAxiosInstance from '~/utils/authorizeAxios'
 //   return res.data
 // }
 
+export const createNewBoardAPI = async(data)=> {
+  const res = await authorizeAxiosInstance.post(`${API_ROOT}/v1/boards`, data)
+  toast.success('Board created successfully!')
+  return res.data
+}
+
 export const updateBoardDetailsAPI = async (boardId, updateData) => {
   const res = await authorizeAxiosInstance.put(
     `${API_ROOT}/v1/boards/${boardId}`,
