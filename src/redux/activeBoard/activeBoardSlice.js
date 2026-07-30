@@ -55,6 +55,8 @@ export const activeBoardSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fecthBoardDetailsAPI.fulfilled, (state, action) => {
       let board = action.payload
+      // thành viên trong board sẽ gộp lại từ 2 mảng owner và member
+      board.FE_allUsers = board.owners.concat(board.members)
       board.columns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
       board.columns.forEach((column) => {
         column.cards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
