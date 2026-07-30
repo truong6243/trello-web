@@ -13,10 +13,13 @@ import {
   moveCardToDifferentColumnAPI,
 } from '~/apis/index'
 import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
+import ActiveCard from '~/components/Modal/ActiveCard/ActiveCard'
+import { selectorCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 function Board() {
   const dispatch = useDispatch()
   const board = useSelector(selectorCurrentActiveBoard)
+  const activeCard = useSelector(selectorCurrentActiveCard)
   const { boardId } = useParams()
   useEffect(() => {
     dispatch(fecthBoardDetailsAPI(boardId))
@@ -76,6 +79,11 @@ function Board() {
   return (
     <>
       <Container disableGutters maxWidth={false} >
+        {/* Modal ActiveCard, check đóng mở dựa trên điều kiện có tồn tại data activeCard lưu trong 
+        redux hay không thì mới render. Mỗi thời điểm chỉ tồn tại một Modal Card đang active */}
+        {activeCard && <ActiveCard />}
+        
+        {/* Các thành phần còn lại của Board Details */}
         <AppBar />
         <BoardBar board={board} />
         <BoardContent

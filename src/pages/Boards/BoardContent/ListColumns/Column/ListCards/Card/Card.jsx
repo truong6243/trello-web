@@ -9,8 +9,11 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import CommentIcon from '@mui/icons-material/Comment';
 import AttachmentIcon from '@mui/icons-material/Attachment';
 import { useSortable } from '@dnd-kit/react/sortable';
+import { useDispatch } from 'react-redux'
+import { updateCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 const Card = ({ card, index, columnId, isOverLay }) => {
+  const dispatch = useDispatch()
   const cardSortable = useSortable({
     id: card._id,
     index: index,
@@ -32,8 +35,14 @@ const Card = ({ card, index, columnId, isOverLay }) => {
   const shouldShowCardActions = () => (
     !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
   )
+
+  const setActiveCard = () => {
+    // cập nhật data cho activeCard trong redux
+    dispatch(updateCurrentActiveCard(card))
+  }
   return (
     <MuiCard
+      onClick = {setActiveCard}
       style={dndkitCardStyle}
       ref={isOverLay ? null : cardSortable.ref}
       sx={{
