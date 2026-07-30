@@ -4,8 +4,6 @@ import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
 import PublicIcon from '@mui/icons-material/Public';
 import AddToDriveIcon from '@mui/icons-material/AddToDrive';
 import BoltIcon from '@mui/icons-material/Bolt';
-import Avatar from '@mui/material/Avatar';
-import AvatarGroup from '@mui/material/AvatarGroup';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
@@ -86,7 +84,7 @@ const BoardBar = ({ board }) => {
           >
             Invite
           </Button>
-          <BoardUserGroup />
+          <BoardUserGroup boardUsers={board?.FE_allUsers} />
         </Box>
       </Box >
     </>
