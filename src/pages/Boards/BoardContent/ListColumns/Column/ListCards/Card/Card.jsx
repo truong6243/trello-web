@@ -10,7 +10,7 @@ import CommentIcon from '@mui/icons-material/Comment';
 import AttachmentIcon from '@mui/icons-material/Attachment';
 import { useSortable } from '@dnd-kit/react/sortable';
 import { useDispatch } from 'react-redux'
-import { updateCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
+import { updateCurrentActiveCard, showModalActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 const Card = ({ card, index, columnId, isOverLay }) => {
   const dispatch = useDispatch()
@@ -39,6 +39,8 @@ const Card = ({ card, index, columnId, isOverLay }) => {
   const setActiveCard = () => {
     // cập nhật data cho activeCard trong redux
     dispatch(updateCurrentActiveCard(card))
+    // show Modal ActiveCard
+    dispatch(showModalActiveCard())
   }
   return (
     <MuiCard
