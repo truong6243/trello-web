@@ -5,10 +5,9 @@ import PublicIcon from '@mui/icons-material/Public';
 import AddToDriveIcon from '@mui/icons-material/AddToDrive';
 import BoltIcon from '@mui/icons-material/Bolt';
 import Tooltip from '@mui/material/Tooltip';
-import Button from '@mui/material/Button';
-import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import { capitallizeFirstLetter } from '../../../utils/fomatter';
 import BoardUserGroup from '~/pages/Boards/BoardBar/BoardUserGroup'
+import InviteBoardUser from '~/pages/Boards/BoardBar/InviteBoardUser'
 
 const BoardBar = ({ board }) => {
   const MENU_STYLE = {
@@ -77,13 +76,8 @@ const BoardBar = ({ board }) => {
 
         </Box>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-          <Button
-            sx={{ color: 'white', borderColor: 'white' }}
-            variant="outlined"
-            startIcon={<PersonAddAltIcon />}
-          >
-            Invite
-          </Button>
+          {/* Xử lý mời user vào làm thành viên của board */}
+          <InviteBoardUser boardId = {board._id}/>
           <BoardUserGroup boardUsers={board?.FE_allUsers} />
         </Box>
       </Box >
