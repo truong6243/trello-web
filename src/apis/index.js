@@ -21,6 +21,15 @@ export const updateBoardDetailsAPI = async (boardId, updateData) => {
   return res.data
 }
 
+export const inviteUserToBoardAPI = async (data) => {
+  const res = await authorizeAxiosInstance.post(
+    `${API_ROOT}/v1/invitations/board`,
+    data
+  )
+  toast.success('User invited to board successfully!')
+  return res.data
+}
+
 export const moveCardToDifferentColumnAPI = async (updateData) => {
   const res = await authorizeAxiosInstance.put(
     `${API_ROOT}/v1/boards/supports/moving_card`,
