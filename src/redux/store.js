@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import activeBoardReducer from '~/redux/activeBoard/activeBoardSlice'
 import activeCardReducer from '~/redux/activeCard/activeCardSlice'
 import { userReducer } from '~/redux/user/userSlice'
+import { notificationsReducer } from '~/redux/notifications/notificationsSlice'
 import { combineReducers } from 'redux'
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
@@ -18,7 +19,8 @@ const rootPersistConfig = {
 const reducers = combineReducers({
   activeBoard: activeBoardReducer,
   activeCard: activeCardReducer,
-  user: userReducer
+  user: userReducer,
+  notifications: notificationsReducer
 })
 
 // thực hiện persis reducer
