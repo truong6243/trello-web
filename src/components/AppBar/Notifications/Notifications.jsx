@@ -21,7 +21,7 @@ import {
 } from '~/redux/notifications/notificationsSlice'
 import { selectorCurrentUser } from '~/redux/user/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
-import { socketIoInstance } from '~/main'
+import { socketIoInstance } from '~/socketClient'
 
 const BOARD_INVITATION_STATUS = {
   PENDING: 'PENDING',
